@@ -171,6 +171,7 @@ class AsyncVideoFrameLoader:
 
 def load_video_frames(
     video_path,
+    frame_names,
     image_size,
     offload_video_to_cpu,
     img_mean=(0.485, 0.456, 0.406),
@@ -197,6 +198,7 @@ def load_video_frames(
     elif is_str and os.path.isdir(video_path):
         return load_video_frames_from_jpg_images(
             video_path=video_path,
+            frame_names=frame_names,
             image_size=image_size,
             offload_video_to_cpu=offload_video_to_cpu,
             img_mean=img_mean,
@@ -212,6 +214,7 @@ def load_video_frames(
 
 def load_video_frames_from_jpg_images(
     video_path,
+    frame_names,
     image_size,
     offload_video_to_cpu,
     img_mean=(0.485, 0.456, 0.406),
@@ -240,12 +243,12 @@ def load_video_frames_from_jpg_images(
             "ffmpeg to start the JPEG file from 00000.jpg."
         )
 
-    frame_names = [
-        p
-        for p in os.listdir(jpg_folder)
-        if os.path.splitext(p)[-1] in [".jpg", ".jpeg", ".JPG", ".JPEG"]
-    ]
-    frame_names.sort(key=lambda p: int(os.path.splitext(p)[0]))
+    # frame_names = [
+    #     p
+    #     for p in os.listdir(jpg_folder)
+    #     if os.path.splitext(p)[-1] in [".jpg", ".jpeg", ".JPG", ".JPEG"]
+    # ]
+    # frame_names.sort(key=lambda p: int(os.path.splitext(p)[0]))
     num_frames = len(frame_names)
     if num_frames == 0:
         raise RuntimeError(f"no images found in {jpg_folder}")
